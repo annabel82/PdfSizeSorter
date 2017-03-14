@@ -1,3 +1,4 @@
-.gitignore
-.DS_Store
-.debris
+*.pdf
+*.gitignore
+*DS_Store
+*debris
