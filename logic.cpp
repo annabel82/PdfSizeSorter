@@ -4,7 +4,7 @@ Logic::Logic()
 {
     homeFolder = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(),
                                         QStandardPaths::LocateDirectory);
-    sourceFolderChoice = homeFolder;                                                            // In the unlikely event that default (home) folder value is
+    sourceFolder = homeFolder;                                                            // In the unlikely event that default (home) folder value is
                                                                                                 // the actual sourceFolder the user wants, set it as such.
     // --------------------------------------------
 
@@ -49,7 +49,7 @@ void Logic::handleRunBtn() {
 
     for (int i = 0; i < allFiles.size(); ++i) {
 
-        fileName = sourceFolderChoice + "/" + allFiles.at(i).toLocal8Bit().constData();
+        fileName = sourceFolder + "/" + allFiles.at(i).toLocal8Bit().constData();
 
         getDocSize(fileName);
 
@@ -58,7 +58,7 @@ void Logic::handleRunBtn() {
 
         // ---------------------------------
 
-        logWindow->print("Found: \"" + sourceFolderChoice + "/" + allFiles.at(i).toLocal8Bit().constData() +
+        logWindow->print("Found: \"" + sourceFolder + "/" + allFiles.at(i).toLocal8Bit().constData() +
                          "\" which is " + QString::number(pageWidth) + "mm x " + QString::number(pageHeight) +
                          "mm -  making it " + getDocSizeName(pageWidth, pageHeight));
     }
@@ -108,7 +108,7 @@ QString Logic::getDocSizeName(int width, int height) {                          
         }                                                                                       // document's width and height are within the range of the
                                                                                                 // current papersize and if so return the name of the papersize.
     }
-    return "Unknown";                                                                           // Returns "unknown" if size isn't known
+    return "Unknown";                                                                           // Returns "unknown" if size isn't within range of a paperSize.
 }
 
 
@@ -126,17 +126,17 @@ bool Logic::getIsInRange(int val, int lowA, int upA, int lowB, int upB) {       
 
 void Logic::handleSourceFolderBtn() {                                                           // Called when user presses the source folder button
 
-    sourceFolderChoice = QFileDialog::getExistingDirectory(sourceFolder,                        // Get the choice from the user
+    sourceFolder = QFileDialog::getExistingDirectory(sourceFolder,                        // Get the  from the user
                          tr("Select Directory"), homeFolder,
                          QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks) + "/";
 
-    sourceFolder->setSourceFolderText(sourceFolderChoice);                                      // Set the cosmetic text line in the source widget
+    sourceFolder->setSourceFolderText(sourceFolder);                                      // Set the cosmetic text line in the source widget
 
     for (PaperSize *paperSize : paperSizes) {                                                   // Then for each paperSize
 
         if (!paperSize->getHasChosenBespokeFolder()) {                                          // If a bespoke output folder hasn't been chosen for that size
 
-            paperSize->setOutputFolder(sourceFolderChoice);                                     // Send the new source folder so the sizes can update their
+            paperSize->setOutputFolder(sourceFolder);                                     // Send the new source folder so the sizes can update their
         }                                                                                       // respective output folders
     }
 }
