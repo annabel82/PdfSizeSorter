@@ -4,7 +4,7 @@ Logic::Logic()
 {
     homeFolder = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(),
                                         QStandardPaths::LocateDirectory);
-    sourceFolder = homeFolder;                                                            // In the unlikely event that default (home) folder value is
+    sourceFolderChoice = homeFolder;                                                            // In the unlikely event that default (home) folder value is
                                                                                                 // the actual sourceFolder the user wants, set it as such.
     // --------------------------------------------
 
@@ -49,16 +49,16 @@ void Logic::handleRunBtn() {
 
     for (int i = 0; i < allFiles.size(); ++i) {
 
-        fileName = sourceFolder + "/" + allFiles.at(i).toLocal8Bit().constData();
+        fileName = sourceFolderChoice + "/" + allFiles.at(i).toLocal8Bit().constData();
 
-        getDocSize(fileName);
+        getDocSize();
 
         int pageWidth = pageSize.width() * 0.3528;
         int pageHeight = pageSize.height() * 0.3528;
 
         // ---------------------------------
 
-        logWindow->print("Found: \"" + sourceFolder + "/" + allFiles.at(i).toLocal8Bit().constData() +
+        logWindow->print("Found: \"" + sourceFolderChoice + "/" + allFiles.at(i).toLocal8Bit().constData() +
                          "\" which is " + QString::number(pageWidth) + "mm x " + QString::number(pageHeight) +
                          "mm -  making it " + getDocSizeName(pageWidth, pageHeight));
     }
@@ -126,17 +126,17 @@ bool Logic::getIsInRange(int val, int lowA, int upA, int lowB, int upB) {       
 
 void Logic::handleSourceFolderBtn() {                                                           // Called when user presses the source folder button
 
-    sourceFolder = QFileDialog::getExistingDirectory(sourceFolder,                        // Get the  from the user
+    sourceFolderChoice = QFileDialog::getExistingDirectory(sourceFolder,                        // Get the  from the user
                          tr("Select Directory"), homeFolder,
                          QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks) + "/";
 
-    sourceFolder->setSourceFolderText(sourceFolder);                                      // Set the cosmetic text line in the source widget
+    sourceFolder->setSourceFolderText(sourceFolderChoice);                                      // Set the cosmetic text line in the source widget
 
     for (PaperSize *paperSize : paperSizes) {                                                   // Then for each paperSize
 
         if (!paperSize->getHasChosenBespokeFolder()) {                                          // If a bespoke output folder hasn't been chosen for that size
 
-            paperSize->setOutputFolder(sourceFolder);                                     // Send the new source folder so the sizes can update their
+            paperSize->setOutputFolder(sourceFolderChoice);                                     // Send the new source folder so the sizes can update their
         }                                                                                       // respective output folders
     }
 }

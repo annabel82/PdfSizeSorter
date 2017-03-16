@@ -2,6 +2,8 @@
 
 PaperSize::PaperSize(QString name, int width, int height, QString homeFolder) {
 
+    this->name = name;
+
     outputFolder = homeFolder + name + "/";                                                     // set the default output folder
 
     minWidthLabel = new QLabel(tr("Min Width"));
