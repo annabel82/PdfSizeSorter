@@ -25,13 +25,14 @@ public:
 private:
     void                handleSortFilesBtn();
     void                handleSourceFolderBtn();
+    bool                getMimeIsOk(QString);
     PaperSize          *paperSizes[7];
     SourceFolder       *sourceFolder;
     LogWindow          *logWindow;
     QString             homeFolder;
     QString             sourceFolderChoice;
     QDialogButtonBox   *actionBtns;
-    bool                cont = true;
+    bool                proceed = true;
 };
 
 #endif // LOGIC_H

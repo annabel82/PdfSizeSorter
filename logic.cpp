@@ -42,11 +42,10 @@ Logic::Logic()
 
 // -------------------------------------------------------------------------
 
-                                                                                                // Called when the user clicks the "Sort Files" button.
-void Logic::handleSortFilesBtn() {
+
+void Logic::handleSortFilesBtn() {                                                              // Called when the user clicks the "Sort Files" button.
 
     QString sourceFile;
-
     QStringList allFileNames = getFileList();                                                   // Get a QString array of all files that exist in the
                                                                                                 // selected source folder.
     // --------------------------------------------
@@ -55,29 +54,39 @@ void Logic::handleSortFilesBtn() {
 
         sourceFile = sourceFolderChoice + "/" + fileName;
 
-        if (cont && QFile::exists(sourceFile) && getMimeIsOk(sourceFile)) {                     // If the file exists, and it returnsand continue is still true
-
-            QSize pageSize = getDocSize(fileName);                                              // Return the size of the document.
-
+        if (proceed && QFile::exists(sourceFile) && getMimeIsOk(sourceFile)) {                  // If the file exists, and it's mime type returns as a pdf
+                                                                                                // and our continue flag is still true.
+            QSize pageSize = getDocSize(fileName);
+                                                                                                // Return the size of the document.
             // --------------------------------------------
 
             int elementLocation = getDocsPaperSizeArrayLocation(pageSize);                      // Return the location in the paper array for document size.
-            QString outputFolder = paperSizes[elementLocation]->getOutputFolder();              // Use the array location value to determine output folder.
+            QString outputFolder;
+
+            if (elementLocation == 404) {
+
+                outputFolder = sourceFolderChoice + "/Size-Unknown";                            // Set a specific output folder if we don't know the size.
+
+            } else {
+
+                outputFolder = paperSizes[elementLocation]->getOutputFolder();                  // Otherwise use the array location value to determine
+            }                                                                                   // output folder.
 
             // --------------------------------------------
 
-            QString triedToCopyMsg = copyFileToFolder(fileName, outputFolder);                  // Attempt our copy and return a QString detailing outcome.
-            logWindow->print(triedToCopyMsg);
+            QString copyAttemptOutcome = copyFileToFolder(fileName, outputFolder);              // Attempt our copy and return a QString detailing outcome.
+            logWindow->print(copyAttemptOutcome);                                               // Then send the returned outcome string to log window.
 
         } else {                                                                                // Or if the file doesn't exist
 
-            cont = false;                                                                       // Set our continue flag to false.
-            logWindow->print("'" + sourceFolderChoice + "/" + fileName + "' not found.");       // And print a sane message to the logWindow.
+            logWindow->print("'" + sourceFolderChoice + "/" + fileName +
+                             "' not found or not a valid pdf file.");                           // And print a sane message to the logWindow.
         }
     }
-                                                                                                // Finally we ensure this flag is set to true, so next time
-    cont = true;                                                                                // the button is used, the sequences re-tries.
-}
+
+    logWindow->n();                                                                             // Finally we add an empty to our logWindow and ensure
+    proceed = true;                                                                             // theflag is set to true, so next timethe button is used,
+}                                                                                               // the sequences re-tries.
 
 
 // -------------------------------------------------------------------------
@@ -85,7 +94,7 @@ void Logic::handleSortFilesBtn() {
 
 QStringList Logic::getFileList() {                                                              // Called first by handleSortFilesBtn().
 
-    if (QDir::exists(sourceFolderChoice)) {                                                     // If our source folder choice exists
+    if (QFile::exists(sourceFolderChoice)) {                                                    // If our source folder choice exists
 
         QDir recoredDir(sourceFolderChoice);
         recoredDir.setNameFilters(QStringList()<<"*.pdf");
@@ -94,8 +103,11 @@ QStringList Logic::getFileList() {                                              
                                                                                                 // folder.
     } else {
 
-        cont = false;                                                                           // If the source folder doesn't exist, set our continue flag
-        return NULL;                                                                            // to false and return NULL.
+        proceed = false;
+        logWindow->print("Source folder '" + sourceFolderChoice +                               // If source folder doesn't exist set our continue flag to
+                         "' not found or not readable.");                                       // false, print a message to the log window  and return NULL.
+        QStringList empty;
+        return empty;
     }
 }
 
@@ -103,19 +115,19 @@ QStringList Logic::getFileList() {                                              
 // -------------------------------------------------------------------------
 
 
-void Logic::getMineIsOk(QString sourceFile) {                                                   // Called from handleSortFilesBtn() for each file found in
+bool Logic::getMimeIsOk(QString sourceFile) {                                                   // Called from handleSortFilesBtn() for each file found in
                                                                                                 // source folder.
     QMimeDatabase db;
     QMimeType mime = db.mimeTypeForFile(sourceFile);
 
-    if (!mime.inherits("application/pdf")) {                                                     // Check mime type returns pdf and return true if so
+    if (mime.inherits("application/pdf")) {                                                     // Check mime type returns pdf and return true if so
 
-            return true;
+        return true;
                                                                                                 // Otherwise return false.
-        } else {
+    } else {
 
-            return false;
-        }
+        return false;
+    }
 }
 
 
@@ -158,36 +170,42 @@ int Logic::getDocsPaperSizeArrayLocation(QSize pageSize) {                      
         elementLocation++;                                                                      // the associated paper size.
     }                                                                                           // Increment our counter which serves to describe the location
                                                                                                 // of the paper size's location in the paper size array.
-    return NULL;
-}                                                                                               // Returns NULL if size isn't within range of a paperSize.
+    return 404;
+}                                                                                               // Returns 404 if size isn't within range of a known paperSize.
 
 
 // -------------------------------------------------------------------------
 
 
-QString Logic::copyFileToFolder(QString fileName, QString outputDir) {
+QString Logic::copyFileToFolder(QString fileName, QString outputFolder) {                       // Called for each document returned by the getFileList() that
+                                                                                                // also passes mine type validity check.
+    QDir qOutputFolder(outputFolder);
 
-    QDir qOutputDir(outputDir);
-
-    if (!qOutputDir.exists()) {
-
-        qOutputDir.mkpath(outputDir);
+    if (!qOutputFolder.exists()) {
+                                                                                                // Check to see if the output folder exists.
+        qOutputFolder.mkpath(outputFolder);                                                     // If it doesn't exist create it.
     }
 
     // --------------------------------------------
 
-    if (QFile::exists(sourceFolderChoice + "/" + fileName)) {
+    if (!QFile::exists(outputFolder + "/" + fileName)) {
+                                                                                                // Check to see if the file already exists
+        QFile::copy(sourceFolderChoice + "/" + fileName, outputFolder + "/" + fileName);        // If it doesn't already exist copy it.
 
-        QFile::copy(sourceFolderChoice + "/" + fileName, outputDir + "/" + fileName);
+    } else {
 
-        if (QFile::exists(outputDir + "/" + fileName)) {
+        return "Source file '" + fileName + "' already exists in '" + outputFolder + "'.";      // If it does print a message to detail this and break.
+    }
 
-            return "Successfully copied '" + fileName + "' s to " + outputFolder;                   // Add successful message to log window.
+    // --------------------------------------------
 
-        } else {                                                                                    // ...otherwise the copy to output folder failed...
+    if (QFile::exists(outputFolder + "/" + fileName)) {
+                                                                                                // Again check to see if the file exists
+        return "Successfully copied '" + fileName + "' to '" + outputFolder + "'.";             // If it does add a success message to the log window.
 
-            return "Failed to move '" + fileName + "' to " + outputFolder;                          // So add a failure message to log window.
-        }
+    } else {
+                                                                                                // If the file doesn't exist, the copy to output folder failed
+        return "Failed to copy '" + fileName + "' to '" + outputFolder + "'.";                  // so add a failure message to log window.
     }
 }
 
@@ -214,7 +232,7 @@ void Logic::handleSourceFolderBtn() {                                           
 
     for (PaperSize *paperSize : paperSizes) {                                                   // Then for each paperSize
 
-        if (!paperSize->getHasChosenBespokeFolder()) {                                          // If a bespoke output folder hasn't been chosen for that size
+        if (!paperSize->getHasChosenBespokeFolder()) {                                          // If a bespoke output folder hasn't been chosen for that size.
 
             paperSize->setOutputFolder(sourceFolderChoice);                                     // Send the new source folder so the sizes can update their
         }                                                                                       // respective output folders

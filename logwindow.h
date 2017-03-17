@@ -11,6 +11,7 @@ public:
     LogWindow();
     void        print(const QString& text);
     void        print(const int);
+    void        n();
 
 private:
     //QFile m_logFile;

@@ -31,7 +31,7 @@ MainWindow::MainWindow()
     window->setLayout(grid);
     statusBar()->show();
     setWindowTitle(tr("PDF Size Sorter"));
-    resize(960, 600);
+    resize(1016, 600);
 }
 
 
