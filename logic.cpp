@@ -44,14 +44,18 @@ Logic::Logic()
 
                                                                                                 // Called when the user clicks the "Sort Files" button.
 void Logic::handleSortFilesBtn() {
-                                                                                                // Get a QString array of all files that exist in the
-    QStringList allFileNames = getFileList();                                                   // selected source folder.
 
+    QString sourceFile;
+
+    QStringList allFileNames = getFileList();                                                   // Get a QString array of all files that exist in the
+                                                                                                // selected source folder.
     // --------------------------------------------
 
     foreach (QString fileName, allFileNames) {                                                  // Foreach through the file list array.
 
-        if (QFile::exists(sourceFolderChoice + "/" + fileName) && cont) {                       // If the file exists and continue is still true
+        sourceFile = sourceFolderChoice + "/" + fileName;
+
+        if (cont && QFile::exists(sourceFile) && getMimeIsOk(sourceFile)) {                     // If the file exists, and it returnsand continue is still true
 
             QSize pageSize = getDocSize(fileName);                                              // Return the size of the document.
 
@@ -97,6 +101,28 @@ QStringList Logic::getFileList() {                                              
 
 
 // -------------------------------------------------------------------------
+
+
+void Logic::getMineIsOk(QString sourceFile) {                                                   // Called from handleSortFilesBtn() for each file found in
+                                                                                                // source folder.
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForFile(sourceFile);
+
+    if (!mime.inherits("application/pdf")) {                                                     // Check mime type returns pdf and return true if so
+
+            return true;
+                                                                                                // Otherwise return false.
+        } else {
+
+            return false;
+        }
+}
+
+
+
+
+
+
 
 
 QSize Logic::getDocSize(QString fileName) {                                                     // Called second by handleSortFilesBtn() after getFileList().
