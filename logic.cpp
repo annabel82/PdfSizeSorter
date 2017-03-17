@@ -42,12 +42,10 @@ Logic::Logic()
 
 // -------------------------------------------------------------------------
 
-
-void Logic::handleRunBtn() {                                                                    // Called when the user clicks the "Sort Files" button.
-
-    QStringList allFileNames = getFileList();                                                   // Get a QString array of all files that exist in the selected
-                                                                                                // source folder.
-    int i = 0;
+                                                                                                // Called when the user clicks the "Sort Files" button.
+void Logic::handleRunBtn() {
+                                                                                                // Get a QString array of all files that exist in the selected
+    QStringList allFileNames = getFileList();                                                   // source folder.
 
     foreach (QString fileName, allFileNames) {
 
