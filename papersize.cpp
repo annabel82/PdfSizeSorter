@@ -86,18 +86,19 @@ PaperSize::PaperSize(QString name, int width, int height, QString homeFolder) {
 
 // -------------------------------------------------------------------------
 
+                                                                                                // Called when a user clicks the output folder btn and sets a
+void PaperSize::handleFolderBtn() {                                                             // bespoke folder into which this papersize will be copied.
 
-void PaperSize::handleFolderBtn() {                                                             // Called when a user clicks the output folder btn.
+    QFileDialog dialog;                                                                         // Create new dialog template which allows the slection of only
+    dialog.setOptions(QFileDialog::ShowDirsOnly);                                               // folders and whose default folder is the user's home directory.
+    dialog.setDirectory(QStandardPaths::standardLocations(QStandardPaths::HomeLocation).last());
 
-    outputFolder = QFileDialog::getExistingDirectory(this, tr("Select Directory"),              // Get the desired output folder choice.
-                                                     homeFolder, QFileDialog::ShowDirsOnly
-                                                     | QFileDialog::DontResolveSymlinks) + "/";
+    if (dialog.exec()) {                                                                        // If user clicked ok to confirm their choice
 
-    if (!hasChosenBespokeFolder) {                                                              // If user clicked ok to confirm their choice making outputFolder
-                                                                                                // equal to something other than homeFolder.
-        hasChosenBespokeFolder = true;
-        outputFolderText->setText(outputFolder);                                                // Set true so choosing a new source folder doesn't auto
-    }                                                                                           // change this value anymore.
+        outputFolder = dialog.selectedFiles()[0];                                               // Get their first clicked folder as the location for output
+        hasChosenBespokeFolder = true;                                                          // Set true so choosing a new source folder doesn't auto
+        outputFolderText->setText(outputFolder);                                                // change this value anymore and set the cosmetic folder text.
+    }
 }
 
 

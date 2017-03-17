@@ -17,13 +17,13 @@ public:
     QPlainTextEdit*     getLogWindow();
     QDialogButtonBox*   getActionBtns();
     QStringList         getFileList();
-    QSize               getDocSize(QString fileNameWithDir);
+    QSize               getDocSize(QString fileName);
     int                 getDocsPaperSizeArrayLocation(QSize pageSize);
-    bool                getIsInRange(int val, int lowA, int upA, int lowB, int upB);
-    bool                copyFileToFolder(QString fileName, int paperSizeElementLocation);
+    bool                getIsInRange(int val, int lwrA, int uprA, int lwrB, int uprB);
+    QString             copyFileToFolder(QString fileName, QString outputFolder);
 
 private:
-    void                handleRunBtn();
+    void                handleSortFilesBtn();
     void                handleSourceFolderBtn();
     PaperSize          *paperSizes[7];
     SourceFolder       *sourceFolder;
@@ -31,6 +31,7 @@ private:
     QString             homeFolder;
     QString             sourceFolderChoice;
     QDialogButtonBox   *actionBtns;
+    bool                cont = true;
 };
 
 #endif // LOGIC_H
