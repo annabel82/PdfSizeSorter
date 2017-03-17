@@ -119,10 +119,7 @@ void Logic::getMineIsOk(QString sourceFile) {                                   
 }
 
 
-
-
-
-
+// -------------------------------------------------------------------------
 
 
 QSize Logic::getDocSize(QString fileName) {                                                     // Called second by handleSortFilesBtn() after getFileList().
