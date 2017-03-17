@@ -4,7 +4,7 @@
 LogWindow::LogWindow()
 {
     LogWindow::setReadOnly(true);
-    LogWindow::appendPlainText("Output window successfully initialised...\n");
+    //LogWindow::appendPlainText("Output window successfully initialised...\n");
 }
 
 void LogWindow::print(const QString& text)

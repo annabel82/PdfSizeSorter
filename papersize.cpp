@@ -93,7 +93,7 @@ void PaperSize::handleFolderBtn() {                                             
                                                      homeFolder, QFileDialog::ShowDirsOnly
                                                      | QFileDialog::DontResolveSymlinks) + "/";
 
-    if (outputFolder != homeFolder) {                                                           // If user clicked ok to confirm their choice making outputFolder
+    if (!hasChosenBespokeFolder) {                                                              // If user clicked ok to confirm their choice making outputFolder
                                                                                                 // equal to something other than homeFolder.
         hasChosenBespokeFolder = true;
         outputFolderText->setText(outputFolder);                                                // Set true so choosing a new source folder doesn't auto

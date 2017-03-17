@@ -13,13 +13,14 @@ class Logic : public QObject
 public:
     Logic();
     QWidget*            getSourceFolder();
-    QWidget*            getPaperSize(int no);
+    QWidget*            getPaperSize(int arrayElementLocation);
     QPlainTextEdit*     getLogWindow();
     QDialogButtonBox*   getActionBtns();
-    void                getFileList();
-    void                getDocSize();
-    QString             getDocSizeName(int, int);
-    bool                getIsInRange(int, int, int, int, int);
+    QStringList         getFileList();
+    QSize               getDocSize(QString fileNameWithDir);
+    int                 getDocsPaperSizeArrayLocation(QSize pageSize);
+    bool                getIsInRange(int val, int lowA, int upA, int lowB, int upB);
+    bool                copyFileToFolder(QString fileName, int paperSizeElementLocation);
 
 private:
     void                handleRunBtn();
@@ -30,9 +31,6 @@ private:
     QString             homeFolder;
     QString             sourceFolderChoice;
     QDialogButtonBox   *actionBtns;
-    QStringList         allFiles;
-    QString             fileName;
-    QSize               pageSize;
 };
 
 #endif // LOGIC_H

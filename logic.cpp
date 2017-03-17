@@ -13,12 +13,12 @@ Logic::Logic()
     // --------------------------------------------
 
     paperSizes[0] = new PaperSize("2A0", 1189, 1682, homeFolder);
-    paperSizes[1] = new PaperSize("A0", 841, 1189, homeFolder);
-    paperSizes[2] = new PaperSize("A1", 594, 841, homeFolder);
-    paperSizes[3] = new PaperSize("A2", 420, 594, homeFolder);
-    paperSizes[4] = new PaperSize("A3", 297, 420, homeFolder);
-    paperSizes[5] = new PaperSize("A4", 210, 297, homeFolder);
-    paperSizes[6] = new PaperSize("A5", 210, 148, homeFolder);
+    paperSizes[1] = new PaperSize( "A0",  841, 1189, homeFolder);
+    paperSizes[2] = new PaperSize( "A1",  594,  841, homeFolder);
+    paperSizes[3] = new PaperSize( "A2",  420,  594, homeFolder);
+    paperSizes[4] = new PaperSize( "A3",  297,  420, homeFolder);
+    paperSizes[5] = new PaperSize( "A4",  210,  297, homeFolder);
+    paperSizes[6] = new PaperSize( "A5",  210,  148, homeFolder);
 
     // --------------------------------------------
 
@@ -43,24 +43,37 @@ Logic::Logic()
 // -------------------------------------------------------------------------
 
 
-void Logic::handleRunBtn() {
+void Logic::handleRunBtn() {                                                                    // Called when the user clicks the "Sort Files" button.
 
-    getFileList();
+    QStringList allFileNames = getFileList();                                                   // Get a QString array of all files that exist in the selected
+                                                                                                // source folder.
+    int i = 0;
 
-    for (int i = 0; i < allFiles.size(); ++i) {
+    foreach (QString fileName, allFileNames) {
 
-        fileName = sourceFolderChoice + "/" + allFiles.at(i).toLocal8Bit().constData();
+        QFile qFileNameWithDir(sourceFolderChoice + "/" + fileName);                            // Cast to QFile so we can check the file still exists.
 
-        getDocSize();
+        if (qFileNameWithDir.exists()) {                                                        // If the file exists
 
-        int pageWidth = pageSize.width() * 0.3528;
-        int pageHeight = pageSize.height() * 0.3528;
+            QSize pageSize = getDocSize(sourceFolderChoice + "/" + fileName);                   // Return the size of the page.
+            int paperSizeElementLocation = getDocsPaperSizeArrayLocation(pageSize);             // Return the name of the papersize this document is.
 
-        // ---------------------------------
+            if (copyFileToFolder(fileName, paperSizeElementLocation)) {                         // Finally copy the file to associated output folder.
 
-        logWindow->print("Found: \"" + sourceFolderChoice + "/" + allFiles.at(i).toLocal8Bit().constData() +
-                         "\" which is " + QString::number(pageWidth) + "mm x " + QString::number(pageHeight) +
-                         "mm -  making it " + getDocSizeName(pageWidth, pageHeight));
+                logWindow->print(
+                              //    paperSizeName + "document  '" + sourceFolderChoice + "/"
+                                fileName + "' successfully moved to "
+                                + paperSizes[paperSizeElementLocation]->getOutputFolder());
+
+            } else {
+
+
+            }
+
+        } else {                                                                                // If the file doesn't exists
+
+            logWindow->print("'" + sourceFolderChoice + "/" + fileName + "' not found.");       // Print a sane message to the logWindow.
+        }
     }
 }
 
@@ -68,47 +81,67 @@ void Logic::handleRunBtn() {
 // -------------------------------------------------------------------------
 
 
-void Logic::getFileList() {
+QStringList Logic::getFileList() {
 
     QDir recoredDir(sourceFolderChoice);
     recoredDir.setNameFilters(QStringList()<<"*.pdf");
-    allFiles = recoredDir.entryList(QDir::NoDotAndDotDot | QDir::Files);
+
+    return recoredDir.entryList(QDir::NoDotAndDotDot | QDir::Files);
 }
 
 
 // -------------------------------------------------------------------------
 
 
-void Logic::getDocSize() {                                                                      // Called by handleRunBtn() after getFileList().
+QSize Logic::getDocSize(QString fileNameWithDir) {                                              // Called by handleRunBtn() after getFileList().
 
     Poppler::Document *doc;                                                                     // Create a variable which holds a poppler document.
-    doc = Poppler::Document::load(fileName);                                                    // Load an actual pdf into that variable.
+    doc = Poppler::Document::load(fileNameWithDir);                                             // Load an actual pdf into that variable.
     Poppler::Page *page = doc->page(0);                                                         // Get the first page from the document.
 
-    pageSize = page->pageSize();                                                                // Get the size of the page.
-    delete doc;
+    QSize pageSize = page->pageSize();                                                          // Get the size of the page.
+    delete doc;                                                                                 // Delete the doc before we return pageSize
+
+    return pageSize;
 }
 
 
 // -------------------------------------------------------------------------
 
                                                                                                 // Called for each document returned by the getFileList()
-QString Logic::getDocSizeName(int width, int height) {                                          // function after the user clicks the "run" button. The width
-                                                                                                // width and height are returned by the getDocSize() function
-    for (PaperSize *paperSize : paperSizes) {                                                   // which runs prior to this.
+int Logic::getDocsPaperSizeArrayLocation(QSize pageSize) {                                     // function after the user clicks the "Sort Files" button.
 
-        int minW = paperSize->getMinWidth();                                                    // For every papersize in our papersizes array.
-        int maxW = paperSize->getMaxWidth();
-        int minH = paperSize->getMinHeight();
+    int width  = pageSize.width()  * 0.3528;                                                    // Calculate width and height in millimeteres from the amount
+    int height = pageSize.height() * 0.3528;                                                    // of points (kind of like dots) the page contains.
+    int elementLocation = 0;                                                                    // This serves as a counter so we can return element location.
+
+    for (PaperSize *paperSize : paperSizes) {                                                   // For each size in our papersize array
+
+        int minW = paperSize->getMinWidth();                                                    // Get the min and max width and height allowed in order for
+        int maxW = paperSize->getMaxWidth();                                                    // our document to qualify as being this size, then check to
+        int minH = paperSize->getMinHeight();                                                   // see if our document matches the ranges.
         int maxH = paperSize->getMaxHeight();
 
         if (getIsInRange(width, minW, maxW, minH, maxH) && getIsInRange(height, minW, maxW, minH, maxH)) {
 
-            return paperSize->getName();                                                        // For each size in our papersize array, check if the received
-        }                                                                                       // document's width and height are within the range of the
-                                                                                                // current papersize and if so return the name of the papersize.
+            return elementLocation;                                                             // If the document is within range of this paper size's values
+        }                                                                                       // return an int that correlates to the element location of
+                                                                                                // the associated paper size.
     }
-    return "Unknown";                                                                           // Returns "unknown" if size isn't within range of a paperSize.
+    elementLocation++;                                                                          // Increment our counter which serves to describe the location
+                                                                                                // of the paper size's location in the paper size array.
+    return NULL;
+}                                                                                               // Returns NULL if size isn't within range of a paperSize.
+
+
+// -------------------------------------------------------------------------
+
+
+bool Logic::copyFileToFolder(QString fileName, int paperSizeElementLocation) {
+
+
+return true;
+
 }
 
 
@@ -154,9 +187,9 @@ QWidget* Logic::getSourceFolder() {                                             
 // -------------------------------------------------------------------------
 
 
-QWidget* Logic::getPaperSize(int no) {                                                          // Allows mainWindow to get new paperSize object
+QWidget* Logic::getPaperSize(int arrayElementLocation) {                                        // Allows mainWindow to get new paperSize object
 
-    return paperSizes[no];
+    return paperSizes[arrayElementLocation];
 }
 
 
