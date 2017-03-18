@@ -194,7 +194,7 @@ QString Logic::copyFileToFolder(QString fileName, QString outputFolder) {       
 
     } else {
 
-        return "Source file '" + fileName + "' already exists in '" + outputFolder + "'";       // If it does print a message to detail this and break.
+        return "Source file '" + fileName + "' already exists in '" + outputFolder + "'";       // If it already exists return a message that reflects this.
     }
 
     // --------------------------------------------
