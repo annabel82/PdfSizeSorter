@@ -75,7 +75,7 @@ void Logic::handleSortFilesBtn() {                                              
             // --------------------------------------------
 
             QString copyAttemptOutcome = copyFileToFolder(fileName, outputFolder);              // Attempt our copy and return a QString detailing outcome.
-            logWindow->print(copyAttemptOutcome);                                               // Then send the returned outcome string to log window.
+            logWindow->print(copyAttemptOutcome);                                               // Then send the returned outcome string to log window.1
 
         } else {
 
