@@ -115,8 +115,8 @@ void PaperSize::setOutputFolder(QString derivedFromSourceFolder) {              
 // -------------------------------------------------------------------------
 
 
-bool PaperSize::getHasChosenBespokeFolder() {                                                   // Called
-
+bool PaperSize::getHasChosenBespokeFolder() {                                                   // Called from logic to get whether or not the user has chosen
+                                                                                                // a bespoke output folder for this papersize.
     return hasChosenBespokeFolder;
 }
 
@@ -124,7 +124,7 @@ bool PaperSize::getHasChosenBespokeFolder() {                                   
 // -------------------------------------------------------------------------
 
 
-QString PaperSize::getName() {                                                                  // Called from logic to get name
+QString PaperSize::getName() {                                                                  // Called from logic to get name.
 
     return name;
 }
@@ -133,7 +133,7 @@ QString PaperSize::getName() {                                                  
 // -------------------------------------------------------------------------
 
 
-int PaperSize::getMinWidth() {                                                                  // Called from logic to get min width
+int PaperSize::getMinWidth() {                                                                  // Called from logic to get min width.
 
     return minWidth->value();
 }
@@ -142,7 +142,7 @@ int PaperSize::getMinWidth() {                                                  
 // -------------------------------------------------------------------------
 
 
-int PaperSize::getMaxWidth() {                                                                  // Called from logic to get max width
+int PaperSize::getMaxWidth() {                                                                  // Called from logic to get max width.
 
     return maxWidth->value();
 }
@@ -151,7 +151,7 @@ int PaperSize::getMaxWidth() {                                                  
 // -------------------------------------------------------------------------
 
 
-int PaperSize::getMinHeight() {                                                                 // Called from logic to get min height
+int PaperSize::getMinHeight() {                                                                 // Called from logic to get min height.
 
     return minHeight->value();
 }
@@ -160,7 +160,7 @@ int PaperSize::getMinHeight() {                                                 
 // -------------------------------------------------------------------------
 
 
-int PaperSize::getMaxHeight() {                                                                 // Called from logic to get max height
+int PaperSize::getMaxHeight() {                                                                 // Called from logic to get max height.
 
     return maxHeight->value();
 }
@@ -169,7 +169,7 @@ int PaperSize::getMaxHeight() {                                                 
 // -------------------------------------------------------------------------
 
 
-QString PaperSize::getOutputFolder() {                                                          // Called from logic to get output folder choice
+QString PaperSize::getOutputFolder() {                                                          // Called from logic to get output folder choice.
 
     return outputFolder;
 }
