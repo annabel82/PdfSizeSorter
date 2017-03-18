@@ -77,16 +77,16 @@ void Logic::handleSortFilesBtn() {                                              
             QString copyAttemptOutcome = copyFileToFolder(fileName, outputFolder);              // Attempt our copy and return a QString detailing outcome.
             logWindow->print(copyAttemptOutcome);                                               // Then send the returned outcome string to log window.
 
-        } else {                                                                                // Or if the file doesn't exist
+        } else {
 
-            logWindow->print("'" + sourceFolderChoice + "/" + fileName +
-                             "' not found or not a valid pdf file.");                           // And print a sane message to the logWindow.
+            logWindow->print("'" + sourceFolderChoice + "/" + fileName +                        // Or if the file doesn't exists, Print a sane message to
+                             "' not found or not a valid pdf file.");                           // the logWindow.
         }
     }
 
-    logWindow->n();                                                                             // Finally we add an empty to our logWindow and ensure
-    proceed = true;                                                                             // theflag is set to true, so next timethe button is used,
-}                                                                                               // the sequences re-tries.
+    logWindow->n();                                                                             // Finally we add an empty line to our logWindow and ensure
+    proceed = true;                                                                             // the continue flag is set to true, so next time the
+}                                                                                               // button is used, the sequences re-tries.
 
 
 // -------------------------------------------------------------------------
