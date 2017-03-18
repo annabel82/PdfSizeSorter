@@ -194,18 +194,18 @@ QString Logic::copyFileToFolder(QString fileName, QString outputFolder) {       
 
     } else {
 
-        return "Source file '" + fileName + "' already exists in '" + outputFolder + "'.";      // If it does print a message to detail this and break.
+        return "Source file '" + fileName + "' already exists in '" + outputFolder + "'";       // If it does print a message to detail this and break.
     }
 
     // --------------------------------------------
 
     if (QFile::exists(outputFolder + "/" + fileName)) {
                                                                                                 // Again check to see if the file exists
-        return "Successfully copied '" + fileName + "' to '" + outputFolder + "'.";             // If it does add a success message to the log window.
+        return "Successfully copied '" + fileName + "' to '" + outputFolder + "'";              // If it does add a success message to the log window.
 
     } else {
                                                                                                 // If the file doesn't exist, the copy to output folder failed
-        return "Failed to copy '" + fileName + "' to '" + outputFolder + "'.";                  // so add a failure message to log window.
+        return "Failed to copy '" + fileName + "' to '" + outputFolder + "'";                   // so add a failure message to log window.
     }
 }
 
