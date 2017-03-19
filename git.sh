@@ -9,9 +9,9 @@ fi
 
 (( $var + 1 ))
 
-DATE=`date +%Y-%m-%d:%H:%M:%S`
+date=`date +%d-%m-%Y:%H:%M`
 
-git add -u && git commit -m Commit-$var-DATE && git push
+git add -u && git commit -m Commit-$var-$date && git push
 cd /Users/anna/PdfSizeSorter
 echo $str $va}
 git push
