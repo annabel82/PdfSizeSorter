@@ -4,17 +4,18 @@ if [ ! -f "./commitNo" ] ; then
   var=0
 
 else
-  value=`cat ./commitNo`
+  var=`cat ./commitNo`
 fi
 
-value=`expr ${var} + 1`
+(( $var + 1 ))
 
+git add -u && git commit -m Commit$var && git push
 cd /Users/anna/PdfSizeSorter
-git add -u && git commit -m 'Commit ${var}' && git push
-
+echo $str $va}
+git push
 echo "${var}" > ./commitNo
 
-sleep 2
+sleep 0
 
 
 
