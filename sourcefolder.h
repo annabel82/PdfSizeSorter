@@ -2,10 +2,6 @@
 #define SOURCEFOLDER_H
 
 #include <QtWidgets>
-#include <QGroupBox>
-#include <QLabel>
-#include <QPushButton>
-#include <QGridlayout>
 
 
 class SourceFolder : public QGroupBox
@@ -13,16 +9,12 @@ class SourceFolder : public QGroupBox
     Q_OBJECT
 
 public:
-    SourceFolder(bool);
-
+    SourceFolder(bool readOnly, QString homeFolder);
     void                setSourceFolderText(QString sourceFolderText);
-
     QPushButton        *sourceFolderBtn;
 
 private:
-    QLabel             *sourceFolderLabel;
     QLineEdit          *sourceFolderLine;
-    QGridLayout        *sourceContainer;
     QString             homeFolder;
     QString             sourceFolder;
 };

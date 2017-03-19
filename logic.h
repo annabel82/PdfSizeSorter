@@ -6,30 +6,31 @@
 #include <papersize.h>
 #include <logwindow.h>
 
-class Logic : public QObject
-{
+class Logic : public QObject {
+
     Q_OBJECT
 
 public:
     Logic();
-    QWidget*            getSourceFolder();
     QWidget*            getPaperSize(int arrayElementLocation);
+    QWidget*            getSourceFolder();
     QPlainTextEdit*     getLogWindow();
     QDialogButtonBox*   getActionBtns();
+
+private:
     QStringList         getFileList();
     QSize               getDocSize(QString fileName);
     int                 getDocsPaperSizeArrayLocation(QSize pageSize);
-    bool                getIsInRange(int val, int lwrA, int uprA, int lwrB, int uprB);
-    QString             copyFileToFolder(QString fileName, QString outputFolder);
-
-private:
     void                handleSortFilesBtn();
     void                handleSourceFolderBtn();
+    bool                getIsInRange(int val, int lwrA, int uprA, int lwrB, int uprB);
     bool                getMimeIsOk(QString);
+    QString             copyFileToFolder(QString fileName, QString outputFolder);
+
+    QString             homeFolder;
     PaperSize          *paperSizes[7];
     SourceFolder       *sourceFolder;
     LogWindow          *logWindow;
-    QString             homeFolder;
     QString             sourceFolderChoice;
     QDialogButtonBox   *actionBtns;
     bool                proceed = true;

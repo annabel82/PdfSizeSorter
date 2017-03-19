@@ -6,7 +6,7 @@ PaperSize::PaperSize(QString name, int width, int height, QString homeFolder) {
 
     outputFolder = homeFolder + name + "/";                                                     // set the default output folder
 
-    minWidthLabel = new QLabel(tr("Min Width"));
+    QLabel *minWidthLabel = new QLabel(tr("Min Width"));
     minWidth = new QSpinBox();
     minWidth->setStatusTip("Set the minimum " + name + " width");
     minWidth->setRange(width - 40, width);
@@ -16,7 +16,7 @@ PaperSize::PaperSize(QString name, int width, int height, QString homeFolder) {
 
     // -------------------------------------
 
-    maxWidthLabel = new QLabel(tr("Max Width"));
+    QLabel *maxWidthLabel = new QLabel(tr("Max Width"));
     maxWidth = new QSpinBox();
     maxWidth->setStatusTip("Set the maximum " + name + " width");
     maxWidth->setRange(width, width + 40);
@@ -26,7 +26,7 @@ PaperSize::PaperSize(QString name, int width, int height, QString homeFolder) {
 
     // -------------------------------------
 
-    minHeightLabel = new QLabel(tr("Min Height"));
+    QLabel *minHeightLabel = new QLabel(tr("Min Height"));
     minHeight = new QSpinBox();
     minHeight->setStatusTip("Set the minimum " + name + " height");
     minHeight->setRange(height - 40, height);
@@ -36,7 +36,7 @@ PaperSize::PaperSize(QString name, int width, int height, QString homeFolder) {
 
     // -------------------------------------
 
-    maxHeightLabel = new QLabel(tr("Max Height"));
+    QLabel *maxHeightLabel = new QLabel(tr("Max Height"));
     maxHeight = new QSpinBox();
     maxHeight->setStatusTip("Set the maximum " + name + " height");
     maxHeight->setRange(height, height + 40);
@@ -46,18 +46,18 @@ PaperSize::PaperSize(QString name, int width, int height, QString homeFolder) {
 
     // -------------------------------------
 
-    outputFolderLabel = new QLabel(tr("Output Folder"));
+    QLabel *outputFolderLabel = new QLabel(tr("Output Folder"));
     outputFolderText = new QLineEdit(outputFolder);
     outputFolderText->setStatusTip("Location " + name + " sized files will be copied to (read only)");
     outputFolderText->setReadOnly(true);
-    outputFolderBtn = new QPushButton(tr("..."), this);
+    QPushButton *outputFolderBtn = new QPushButton(tr("..."), this);
     outputFolderBtn->setStatusTip("Choose the location " + name + " sized files will be copied to");
 
     connect(outputFolderBtn, &QPushButton::clicked, this, [this]{ handleFolderBtn(); });
 
     // -------------------------------------
 
-    container = new QGridLayout;
+    QGridLayout *container = new QGridLayout;
     container->setVerticalSpacing(6);
     container->setContentsMargins(10, 10, 10, 10);                                              // Left Top Right Bottom
 
@@ -118,15 +118,6 @@ void PaperSize::setOutputFolder(QString derivedFromSourceFolder) {              
 bool PaperSize::getHasChosenBespokeFolder() {                                                   // Called from logic to get whether or not the user has chosen
                                                                                                 // a bespoke output folder for this papersize.
     return hasChosenBespokeFolder;
-}
-
-
-// -------------------------------------------------------------------------
-
-
-QString PaperSize::getName() {                                                                  // Called from logic to get name.
-
-    return name;
 }
 
 

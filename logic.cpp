@@ -8,7 +8,7 @@ Logic::Logic()
                                                                                                 // the actual sourceFolder the user wants, set it as such.
     // --------------------------------------------
 
-    sourceFolder = new SourceFolder(true);                                                      // True because the text box in source folder is read only.
+    sourceFolder = new SourceFolder(true, homeFolder);                                          // True because the text box in source folder is read only.
 
     // --------------------------------------------
 
@@ -224,18 +224,22 @@ bool Logic::getIsInRange(int val, int lwrA, int uprA, int lwrB, int uprB) {     
 
 void Logic::handleSourceFolderBtn() {                                                           // Called when user presses the source folder button
 
-    sourceFolderChoice = QFileDialog::getExistingDirectory(sourceFolder,                        // Get the  from the user
-                         tr("Select Directory"), homeFolder,
-                         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks) + "/";
+    QFileDialog srcDialog;                                                                      // Create new dialog template which only allows the user to select
+    srcDialog.setOptions(QFileDialog::ShowDirsOnly);                                            // folders and whose default folder is the user's home directory.
+    srcDialog.setDirectory(QStandardPaths::standardLocations(QStandardPaths::HomeLocation).last());
 
-    sourceFolder->setSourceFolderText(sourceFolderChoice);                                      // Set the cosmetic text line in the source widget
+    if (srcDialog.exec()) {                                                                     // If user clicked ok to confirm their choice
 
-    for (PaperSize *paperSize : paperSizes) {                                                   // Then for each paperSize
+        sourceFolderChoice = srcDialog.selectedFiles()[0];                                      // Get their first clicked folder as the location for output
+        sourceFolder->setSourceFolderText(sourceFolderChoice);                                  // Set the cosmetic text line in the source widget
 
-        if (!paperSize->getHasChosenBespokeFolder()) {                                          // If a bespoke output folder hasn't been chosen for that size.
+        for (PaperSize *paperSize : paperSizes) {                                               // Then for each paperSize
 
-            paperSize->setOutputFolder(sourceFolderChoice);                                     // Send the new source folder so the sizes can update their
-        }                                                                                       // respective output folders
+            if (!paperSize->getHasChosenBespokeFolder()) {                                      // If a bespoke output folder hasn't been chosen for that size.
+
+                paperSize->setOutputFolder(sourceFolderChoice);                                 // Send the new source folder so the sizes can update their
+            }                                                                                   // respective output folders
+        }
     }
 }
 

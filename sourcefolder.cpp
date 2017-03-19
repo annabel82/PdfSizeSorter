@@ -1,11 +1,8 @@
 #include <sourcefolder.h>
 
-SourceFolder::SourceFolder(bool readOnly) {
+SourceFolder::SourceFolder(bool readOnly, QString homeFolder) {
 
-    sourceFolderLabel = new QLabel(tr("Source Folder Location"));
-
-    homeFolder = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(),
-                                        QStandardPaths::LocateDirectory);
+    QLabel *sourceFolderLabel = new QLabel(tr("Source Folder Location"));
 
     sourceFolderLine = new QLineEdit(homeFolder);
     sourceFolderLine->setStatusTip("Source files location");
@@ -14,7 +11,7 @@ SourceFolder::SourceFolder(bool readOnly) {
     sourceFolderBtn = new QPushButton(tr("..."), this);
     sourceFolderBtn->setStatusTip("");
 
-    sourceContainer = new QGridLayout;
+    QGridLayout *sourceContainer = new QGridLayout;
     sourceContainer->setContentsMargins(10, 10, 10, 10);                                        // Left Top Right Bottom
     sourceContainer->setVerticalSpacing(12);
     sourceContainer->addWidget(sourceFolderLabel, 0, 1);

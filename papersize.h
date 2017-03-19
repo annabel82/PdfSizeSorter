@@ -2,10 +2,7 @@
 #define PAPERSIZE_H
 
 #include <QtWidgets>
-#include <QLabel>
-#include <QSpinBox>
-#include <QPushButton>
-#include <QGridlayout>
+
 
 class PaperSize : public QWidget
 {
@@ -13,32 +10,24 @@ class PaperSize : public QWidget
 
 public:
     PaperSize();
-    PaperSize(QString, int, int, QString);
-    void                setOutputFolder(QString);
-    QString             getName();
+    PaperSize(QString name, int width, int height, QString homeFolder);
+    void                setOutputFolder(QString derivedFromSourceFolder);
+    QString             getOutputFolder();
     int                 getMinWidth();
     int                 getMaxWidth();
     int                 getMinHeight();
     int                 getMaxHeight();
-    QString             getOutputFolder();
     bool                getHasChosenBespokeFolder();
 
 private:
     void                handleFolderBtn();
-    QPushButton        *outputFolderBtn;
-    QLabel             *minWidthLabel;
-    QLabel             *maxWidthLabel;
-    QLabel             *minHeightLabel;
-    QLabel             *maxHeightLabel;
-    QLabel             *outputFolderLabel;
+
     QSpinBox           *minWidth;
     QSpinBox           *maxWidth;
     QSpinBox           *minHeight;
     QSpinBox           *maxHeight;
     QLineEdit          *outputFolderText;
-    QGridLayout        *container;
     QString             outputFolder;
-    QString             homeFolder;
     QString             name;
     bool                hasChosenBespokeFolder = false;
 };

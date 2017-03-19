@@ -2,13 +2,13 @@
 
 MainWindow::MainWindow()
 {                                                                                               // Instantiate Logic class which in turn instantiates source,
-    logic = new Logic;                                                                          // pageSize and logWindow.
-    window = new QWidget;                                                                       // Create widget we intend to be used as primary widget (frame).
-    grid = new QGridLayout;
+    Logic *logic = new Logic;                                                                   // pageSize and logWindow.
+    QWidget *window = new QWidget;                                                              // Create widget we intend to be used as primary widget (frame).
+    QGridLayout *grid = new QGridLayout;
 
     // -------------------------------------
 
-    tabWidget = new QTabWidget;
+    QTabWidget *tabWidget = new QTabWidget;
     tabWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);                       // Don't want this to resize with window
     tabWidget->addTab(logic->getPaperSize(0), tr("2A0"));
     tabWidget->addTab(logic->getPaperSize(1), tr("A0"));
@@ -31,7 +31,7 @@ MainWindow::MainWindow()
     window->setLayout(grid);
     statusBar()->show();
     setWindowTitle(tr("PDF Size Sorter"));
-    resize(1016, 600);
+    resize(900, 500);
 }
 
 

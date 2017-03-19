@@ -9,12 +9,6 @@ class MainWindow : public QMainWindow {
 
 public:
     MainWindow();
-
-private:
-    QWidget            *window;
-    QGridLayout        *grid;
-    Logic              *logic;
-    QTabWidget         *tabWidget;
 };
 
 #endif
