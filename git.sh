@@ -13,7 +13,7 @@ DATE=`date '+%d-%b-%Y_%H:%M'`
 
 git add -u && git commit -m Commit$var_$DATE && git push
 cd /Users/anna/PdfSizeSorter
-echo $str $va}
+echo $str $var
 git push
 echo "${var}" > ./commitNo
 
