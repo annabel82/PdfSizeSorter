@@ -9,7 +9,7 @@ PaperSize::PaperSize(QString name, int width, int height, QString homeFolder) {
     QLabel *minWidthLabel = new QLabel(tr("Min Width"));
     minWidth = new QSpinBox();
     minWidth->setStatusTip("Set the minimum " + name + " width");
-    minWidth->setRange(width - 40, width);
+    minWidth->setRange(width - 60, width);
     minWidth->setSuffix("mm");
     minWidth->setSingleStep(5);
     minWidth->setValue(width - 20);
@@ -19,7 +19,7 @@ PaperSize::PaperSize(QString name, int width, int height, QString homeFolder) {
     QLabel *maxWidthLabel = new QLabel(tr("Max Width"));
     maxWidth = new QSpinBox();
     maxWidth->setStatusTip("Set the maximum " + name + " width");
-    maxWidth->setRange(width, width + 40);
+    maxWidth->setRange(width, width + 60);
     maxWidth->setSuffix("mm");
     maxWidth->setSingleStep(5);
     maxWidth->setValue(width + 20);
@@ -29,7 +29,7 @@ PaperSize::PaperSize(QString name, int width, int height, QString homeFolder) {
     QLabel *minHeightLabel = new QLabel(tr("Min Height"));
     minHeight = new QSpinBox();
     minHeight->setStatusTip("Set the minimum " + name + " height");
-    minHeight->setRange(height - 40, height);
+    minHeight->setRange(height - 60, height);
     minHeight->setSuffix("mm");
     minHeight->setSingleStep(5);
     minHeight->setValue(height - 20);
@@ -39,7 +39,7 @@ PaperSize::PaperSize(QString name, int width, int height, QString homeFolder) {
     QLabel *maxHeightLabel = new QLabel(tr("Max Height"));
     maxHeight = new QSpinBox();
     maxHeight->setStatusTip("Set the maximum " + name + " height");
-    maxHeight->setRange(height, height + 40);
+    maxHeight->setRange(height, height + 60);
     maxHeight->setSuffix("mm");
     maxHeight->setSingleStep(5);
     maxHeight->setValue(height + 20);
@@ -90,7 +90,7 @@ PaperSize::PaperSize(QString name, int width, int height, QString homeFolder) {
 void PaperSize::handleFolderBtn() {                                                             // bespoke folder into which this papersize will be copied.
 
     QFileDialog dialog;                                                                         // Create new dialog template which allows the slection of only
-    dialog.setOptions(QFileDialog::ShowDirsOnly);                                               // folders and whose default folder is the user's home directory.
+    dialog.setFileMode(QFileDialog::Directory);                                                 // folders and whose default folder is the user's home directory.
     dialog.setDirectory(QStandardPaths::standardLocations(QStandardPaths::HomeLocation).last());
 
     if (dialog.exec()) {                                                                        // If user clicked ok to confirm their choice

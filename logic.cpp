@@ -225,7 +225,7 @@ bool Logic::getIsInRange(int val, int lwrA, int uprA, int lwrB, int uprB) {     
 void Logic::handleSourceFolderBtn() {                                                           // Called when user presses the source folder button
 
     QFileDialog srcDialog;                                                                      // Create new dialog template which only allows the user to select
-    srcDialog.setOptions(QFileDialog::ShowDirsOnly);                                            // folders and whose default folder is the user's home directory.
+    srcDialog.setFileMode(QFileDialog::Directory);                                              // folders and whose default folder is the user's home directory.
     srcDialog.setDirectory(QStandardPaths::standardLocations(QStandardPaths::HomeLocation).last());
 
     if (srcDialog.exec()) {                                                                     // If user clicked ok to confirm their choice

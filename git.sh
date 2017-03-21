@@ -7,7 +7,7 @@ else
   var=`cat ./commitNo`
 fi
 
-(( $var + 1 ))
+$var=(( $var + 1 ))
 
 DATE=`date '+%d-%b-%Y_%H:%M'`
 
