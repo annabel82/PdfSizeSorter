@@ -2,22 +2,16 @@
 
 if [ ! -f "./commitNo" ] ; then
   var=0
-
 else
   var=`cat ./commitNo`
 fi
 
-$var=(( $var + 1 ))
-
+var=$((var+1))
 DATE=`date '+%d-%b-%Y_%H:%M'`
 
-git add -u && git commit -m Commit${var}_$DATE && git push
+git add -u && git commit -m "Commit${var} - $DATE" && git push
 cd /Users/anna/PdfSizeSorter
-echo $str $var
 git push
+
 echo "${var}" > ./commitNo
-
-sleep 0
-
-
-
+sleep 2
