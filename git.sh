@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+cd /Users/anna/PdfSizeSorter
+
 if [ ! -f "./commitNo" ] ; then
   var=0
 else
@@ -11,7 +13,6 @@ var=$((var+1))
 read -p "Enter commit message: " -e commit
 
 git add -u && git commit -m "Commit${var} - ${commit}" && git push
-cd /Users/anna/PdfSizeSorter
 
 echo "${var}" > ./commitNo
 sleep 2
