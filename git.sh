@@ -7,11 +7,11 @@ else
 fi
 
 var=$((var+1))
-DATE=`date '+%d-%b-%Y-%H:%M'`
+#DATE=`date '+%d-%b-%Y-%H:%M'`
+read -p "Enter commit message: " -e commit
 
-git add -u && git commit -m "Commit${var} - $DATE" && git push
+git add -u && git commit -m "Commit${var} - ${commit}" && git push
 cd /Users/anna/PdfSizeSorter
-git push
 
 echo "${var}" > ./commitNo
 sleep 2
