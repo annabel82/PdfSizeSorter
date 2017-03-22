@@ -7,7 +7,7 @@ else
 fi
 
 var=$((var+1))
-DATE=`date '+%d-%b-%Yi-%H:%M'`
+DATE=`date '+%d-%b-%Y-%H:%M'`
 
 git add -u && git commit -m "Commit${var} - $DATE" && git push
 cd /Users/anna/PdfSizeSorter
