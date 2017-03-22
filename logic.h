@@ -12,27 +12,26 @@ class Logic : public QObject {
 
 public:
     Logic();
-    QWidget*            getPaperSize(int arrayElementLocation);
+    void                handleSortFilesBtn();
+    void                setSourceFolderChoice(QString sourceFolderChoice);
     QWidget*            getSourceFolder();
+    QWidget*            getPaperSize(int arrayElementLocation);
+    QWidget*            getOtherPaperSize();
     QPlainTextEdit*     getLogWindow();
-    QDialogButtonBox*   getActionBtns();
+    SourceFolder       *sourceFolder;
 
 private:
     QStringList         getFileList();
-    QSize               getDocSize(QString fileName);
-    int                 getDocsPaperSizeArrayLocation(QSize pageSize);
-    void                handleSortFilesBtn();
-    void                handleSourceFolderBtn();
-    bool                getIsInRange(int val, int lwrA, int uprA, int lwrB, int uprB);
     bool                getMimeIsOk(QString);
+    QSize               getDocSize(QString fileName);    
+    int                 getDocsPaperSizeArrayLocation(QSize pageSize);
     QString             copyFileToFolder(QString fileName, QString outputFolder);
-
+    bool                getIsInRange(int val, int lwrA, int uprA, int lwrB, int uprB);
     QString             homeFolder;
     PaperSize          *paperSizes[7];
-    SourceFolder       *sourceFolder;
+    PaperSize          *otherPaperSize;
     LogWindow          *logWindow;
     QString             sourceFolderChoice;
-    QDialogButtonBox   *actionBtns;
     bool                proceed = true;
 };
 

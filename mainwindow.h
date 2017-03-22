@@ -9,6 +9,11 @@ class MainWindow : public QMainWindow {
 
 public:
     MainWindow();
+
+private:
+    QDialogButtonBox   *actionBtns;
+    void                handleSourceFolderBtn();
+    Logic              *logic;
 };
 
 #endif

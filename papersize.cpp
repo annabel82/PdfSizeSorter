@@ -1,56 +1,56 @@
 #include <papersize.h>
 
-PaperSize::PaperSize(QString name, int width, int height, QString homeFolder) {
+PaperSize::PaperSize(QString name, int width, int height, QString homeFolder, bool isKnownSize) {
 
     this->name = name;
 
-    outputFolder = homeFolder + name + "/";                                                     // set the default output folder
+    if (isKnownSize) {                                                                          // If is a known size (aka not the wildcard unknown papersize)
+                                                                                                // we need to create the spinboxes
+        minWidthLabel = new QLabel(tr("Min Width"));
+        minWidth = new QSpinBox();
+        minWidth->setStatusTip("Set the minimum " + name + " width");
+        minWidth->setRange(width - 60, width);
+        minWidth->setSuffix("mm");
+        minWidth->setSingleStep(5);
+        minWidth->setValue(width - 20);
 
-    QLabel *minWidthLabel = new QLabel(tr("Min Width"));
-    minWidth = new QSpinBox();
-    minWidth->setStatusTip("Set the minimum " + name + " width");
-    minWidth->setRange(width - 60, width);
-    minWidth->setSuffix("mm");
-    minWidth->setSingleStep(5);
-    minWidth->setValue(width - 20);
+        // -------------------------------------
 
-    // -------------------------------------
+        maxWidthLabel = new QLabel(tr("Max Width"));
+        maxWidth = new QSpinBox();
+        maxWidth->setStatusTip("Set the maximum " + name + " width");
+        maxWidth->setRange(width, width + 60);
+        maxWidth->setSuffix("mm");
+        maxWidth->setSingleStep(5);
+        maxWidth->setValue(width + 20);
 
-    QLabel *maxWidthLabel = new QLabel(tr("Max Width"));
-    maxWidth = new QSpinBox();
-    maxWidth->setStatusTip("Set the maximum " + name + " width");
-    maxWidth->setRange(width, width + 60);
-    maxWidth->setSuffix("mm");
-    maxWidth->setSingleStep(5);
-    maxWidth->setValue(width + 20);
+        // -------------------------------------
 
-    // -------------------------------------
+        minHeightLabel = new QLabel(tr("Min Height"));
+        minHeight = new QSpinBox();
+        minHeight->setStatusTip("Set the minimum " + name + " height");
+        minHeight->setRange(height - 60, height);
+        minHeight->setSuffix("mm");
+        minHeight->setSingleStep(5);
+        minHeight->setValue(height - 20);
 
-    QLabel *minHeightLabel = new QLabel(tr("Min Height"));
-    minHeight = new QSpinBox();
-    minHeight->setStatusTip("Set the minimum " + name + " height");
-    minHeight->setRange(height - 60, height);
-    minHeight->setSuffix("mm");
-    minHeight->setSingleStep(5);
-    minHeight->setValue(height - 20);
+        // -------------------------------------
 
-    // -------------------------------------
-
-    QLabel *maxHeightLabel = new QLabel(tr("Max Height"));
-    maxHeight = new QSpinBox();
-    maxHeight->setStatusTip("Set the maximum " + name + " height");
-    maxHeight->setRange(height, height + 60);
-    maxHeight->setSuffix("mm");
-    maxHeight->setSingleStep(5);
-    maxHeight->setValue(height + 20);
+        maxHeightLabel = new QLabel(tr("Max Height"));
+        maxHeight = new QSpinBox();
+        maxHeight->setStatusTip("Set the maximum " + name + " height");
+        maxHeight->setRange(height, height + 60);
+        maxHeight->setSuffix("mm");
+        maxHeight->setSingleStep(5);
+        maxHeight->setValue(height + 20);
+    }
 
     // -------------------------------------
 
     QLabel *outputFolderLabel = new QLabel(tr("Output Folder"));
-    outputFolderText = new QLineEdit(outputFolder);
+    outputFolderText = new QLineEdit(homeFolder + name + "/");
     outputFolderText->setStatusTip("Location " + name + " sized files will be copied to (read only)");
-    outputFolderText->setReadOnly(true);
-    QPushButton *outputFolderBtn = new QPushButton(tr("..."), this);
+    QPushButton *outputFolderBtn = new QPushButton(tr("Choose location"), this);
     outputFolderBtn->setStatusTip("Choose the location " + name + " sized files will be copied to");
 
     connect(outputFolderBtn, &QPushButton::clicked, this, [this]{ handleFolderBtn(); });
@@ -60,20 +60,26 @@ PaperSize::PaperSize(QString name, int width, int height, QString homeFolder) {
     QGridLayout *container = new QGridLayout;
     container->setVerticalSpacing(6);
     container->setContentsMargins(10, 10, 10, 10);                                              // Left Top Right Bottom
+    container->setRowMinimumHeight(1, 25);                                                      // Second column (numbered 1, after label row which is 0. This
+                                                                                                // is so that unknown tab without spinboxes aligns properly.
+    if (isKnownSize) {
+                                                                                                // If is a known size (aka not the wildcard unknown papersize)
+        container->setColumnMinimumWidth(0, 92);                                                // we need to tailor spinboxes a little further and then add
+        container->setColumnMinimumWidth(1, 92);                                                // them to the container widget.
+        container->setColumnMinimumWidth(2, 92);
+        container->setColumnMinimumWidth(3, 92);
 
-    container->setColumnMinimumWidth(0,92);
-    container->setColumnMinimumWidth(1,92);
-    container->setColumnMinimumWidth(2,92);
-    container->setColumnMinimumWidth(3,92);
+        container->addWidget(minWidthLabel, 0, 0);
+        container->addWidget(minWidth, 1, 0);
+        container->addWidget(maxWidthLabel, 0, 1);
+        container->addWidget(maxWidth, 1, 1);
+        container->addWidget(minHeightLabel, 0, 2);
+        container->addWidget(minHeight, 1, 2);
+        container->addWidget(maxHeightLabel, 0, 3);
+        container->addWidget(maxHeight, 1, 3);
+    }
 
-    container->addWidget(minWidthLabel, 0, 0);
-    container->addWidget(minWidth, 1, 0);
-    container->addWidget(maxWidthLabel, 0, 1);
-    container->addWidget(maxWidth, 1, 1);
-    container->addWidget(minHeightLabel, 0, 2);
-    container->addWidget(minHeight, 1, 2);
-    container->addWidget(maxHeightLabel, 0, 3);
-    container->addWidget(maxHeight, 1, 3);
+    container->setColumnMinimumWidth(5, 96);                                                    // Set "Choose folder" button minimum size.
     container->addWidget(outputFolderLabel, 0, 4);
     container->addWidget(outputFolderText, 1, 4);
     container->addWidget(outputFolderBtn, 1, 5);
@@ -86,31 +92,39 @@ PaperSize::PaperSize(QString name, int width, int height, QString homeFolder) {
 
 // -------------------------------------------------------------------------
 
-                                                                                                // Called when a user clicks the output folder btn and sets a
+                                                                                                // Called when user clicks the output folder btn and sets a
 void PaperSize::handleFolderBtn() {                                                             // bespoke folder into which this papersize will be copied.
 
-    QFileDialog dialog;                                                                         // Create new dialog template which allows the slection of only
-    dialog.setFileMode(QFileDialog::Directory);                                                 // folders and whose default folder is the user's home directory.
+    QFileDialog dialog;                                                                         // Create new dialog which only allows the slection of
+    dialog.setFileMode(QFileDialog::Directory);                                                 // folders & whose default folder is tuser's home directory.
     dialog.setDirectory(QStandardPaths::standardLocations(QStandardPaths::HomeLocation).last());
+                                                                                                // If user clicked ok to confirm their choice
+    if (dialog.exec()) {
+                                                                                                // Set true so choosing a new source folder doesn't auto
+        hasChosenBespokeFolder = true;                                                          // update this output folder any longer.
 
-    if (dialog.exec()) {                                                                        // If user clicked ok to confirm their choice
+        QString choice = dialog.selectedFiles()[0];                                             // Get first clicked folder as "choice" value.
 
-        outputFolder = dialog.selectedFiles()[0];                                               // Get their first clicked folder as the location for output
-        hasChosenBespokeFolder = true;                                                          // Set true so choosing a new source folder doesn't auto
-        outputFolderText->setText(outputFolder);                                                // change this value anymore and set the cosmetic folder text.
+        if (!choice.endsWith("/")) {                                                            // Test to see if the OS appends or location choice results
+                                                                                                // in a trailing forward slash.
+            outputFolderText->setText(choice + "/");
+                                                                                                // If it doesn't have a trailing forward slash, add one and
+        } else {                                                                                // then set the QLineEdit output folder text accordingly.
+
+            outputFolderText->setText(choice);                                                  // Otherwise simply set the value as QLineEdit output folder
+        }                                                                                       // text accordingly.
     }
 }
 
 
 // -------------------------------------------------------------------------
 
+                                                                                                // Called from Logic if hasChosenBespokeFolder returns false.
+void PaperSize::setOutputFolder(QString derivedFromSourceFolder) {                              // This updates the output folder of this paper size such
+                                                                                                // that it's a subfolder of the source folder the just chose.
+    outputFolderText->setText(derivedFromSourceFolder + name + "/");
+}
 
-void PaperSize::setOutputFolder(QString derivedFromSourceFolder) {                              // Called from Logic only if hasChosenBespokeFolder returns false
-                                                                                                // and updates the output folder such that it's a subfolder of
-    outputFolderText->setText(derivedFromSourceFolder + name + "/");                            // the source folder the user just chose.
-    outputFolder = derivedFromSourceFolder + name + "/";                                        // Sets cosmetic (because read only) QLineEdit value.
-}                                                                                               // Sets actual variable value we'll use to determine where to
-                                                                                                // copy the size to.
 
 // -------------------------------------------------------------------------
 
@@ -160,9 +174,9 @@ int PaperSize::getMaxHeight() {                                                 
 // -------------------------------------------------------------------------
 
 
-QString PaperSize::getOutputFolder() {                                                          // Called from logic to get output folder choice.
-
-    return outputFolder;
+QString PaperSize::getOutputFolder() {                                                          // Called from logic to get output folder choice. Typing in the
+                                                                                                // QLineEdit box updates displayText value, as does clicking the
+    return outputFolderText->displayText();                                                     // button next to tQLineEdit box and choosing a folder that way.
 }
 
 

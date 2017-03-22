@@ -10,7 +10,7 @@ class PaperSize : public QWidget
 
 public:
     PaperSize();
-    PaperSize(QString name, int width, int height, QString homeFolder);
+    PaperSize(QString name, int width, int height, QString homeFolder, bool isKnownSize);
     void                setOutputFolder(QString derivedFromSourceFolder);
     QString             getOutputFolder();
     int                 getMinWidth();
@@ -26,8 +26,11 @@ private:
     QSpinBox           *maxWidth;
     QSpinBox           *minHeight;
     QSpinBox           *maxHeight;
+    QLabel             *minWidthLabel;
+    QLabel             *maxWidthLabel;
+    QLabel             *minHeightLabel;
+    QLabel             *maxHeightLabel;
     QLineEdit          *outputFolderText;
-    QString             outputFolder;
     QString             name;
     bool                hasChosenBespokeFolder = false;
 };

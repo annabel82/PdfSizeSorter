@@ -4,6 +4,7 @@ Logic::Logic()
 {
     homeFolder = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(),
                                         QStandardPaths::LocateDirectory);
+
     sourceFolderChoice = homeFolder;                                                            // In the unlikely event that default (home) folder value is
                                                                                                 // the actual sourceFolder the user wants, set it as such.
     // --------------------------------------------
@@ -12,31 +13,19 @@ Logic::Logic()
 
     // --------------------------------------------
 
-    paperSizes[0] = new PaperSize("2A0", 1189, 1682, homeFolder);
-    paperSizes[1] = new PaperSize( "A0",  841, 1189, homeFolder);
-    paperSizes[2] = new PaperSize( "A1",  594,  841, homeFolder);
-    paperSizes[3] = new PaperSize( "A2",  420,  594, homeFolder);
-    paperSizes[4] = new PaperSize( "A3",  297,  420, homeFolder);
-    paperSizes[5] = new PaperSize( "A4",  210,  297, homeFolder);
-    paperSizes[6] = new PaperSize( "A5",  210,  148, homeFolder);
+    paperSizes[0]  = new PaperSize("2A0", 1189, 1682, homeFolder, true);                        // True because it's a known size, which means the entry
+    paperSizes[1]  = new PaperSize( "A0",  841, 1189, homeFolder, true);                        // will have spinboxes to provide some flexibility in it's
+    paperSizes[2]  = new PaperSize( "A1",  594,  841, homeFolder, true);                        // min/max height and width.
+    paperSizes[3]  = new PaperSize( "A2",  420,  594, homeFolder, true);
+    paperSizes[4]  = new PaperSize( "A3",  297,  420, homeFolder, true);
+    paperSizes[5]  = new PaperSize( "A4",  210,  297, homeFolder, true);
+    paperSizes[6]  = new PaperSize( "A5",  210,  148, homeFolder, true);
+    otherPaperSize = new PaperSize( "Other", 0,    0, homeFolder, false);
 
     // --------------------------------------------
 
-    logWindow = new LogWindow;
-    logWindow->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);                   // We want the log to take up any extra space upon window
-                                                                                                // resize.
-    // --------------------------------------------
-
-    actionBtns = new QDialogButtonBox();
-    actionBtns->addButton(tr("Sort Files"), QDialogButtonBox::AcceptRole);
-    actionBtns->addButton(tr("Close"),QDialogButtonBox::RejectRole);
-
-    // --------------------------------------------
-
-    connect(actionBtns, &QDialogButtonBox::accepted,              this, [this] { handleSortFilesBtn(); });
-    connect(actionBtns, &QDialogButtonBox::rejected,              this, [this] { QApplication::quit(); });
-    connect(sourceFolder->sourceFolderBtn, &QPushButton::clicked, this, [this] { handleSourceFolderBtn(); });
-
+    logWindow = new LogWindow;                                                                  // We want the log to take up any extra space upon window
+    logWindow->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);                   // resize.
 }
 
 
@@ -52,7 +41,7 @@ void Logic::handleSortFilesBtn() {                                              
 
     foreach (QString fileName, allFileNames) {                                                  // Foreach through the file list array.
 
-        sourceFile = sourceFolderChoice + "/" + fileName;
+        sourceFile = sourceFolderChoice + fileName;
 
         if (proceed && QFile::exists(sourceFile) && getMimeIsOk(sourceFile)) {                  // If the file exists, and it's mime type returns as a pdf
                                                                                                 // and our continue flag is still true.
@@ -63,9 +52,9 @@ void Logic::handleSortFilesBtn() {                                              
             int elementLocation = getDocsPaperSizeArrayLocation(pageSize);                      // Return the location in the paper array for document size.
             QString outputFolder;
 
-            if (elementLocation == 404) {
+            if (elementLocation == 404) {                                                       // If we don't know the size
 
-                outputFolder = sourceFolderChoice + "/Size-Unknown";                            // Set a specific output folder if we don't know the size.
+                outputFolder = otherPaperSize->getOutputFolder();                               // Set the outfolder from unique otherPapoerSize object.
 
             } else {
 
@@ -79,8 +68,8 @@ void Logic::handleSortFilesBtn() {                                              
 
         } else {
 
-            logWindow->print("'" + sourceFolderChoice + "/" + fileName +                        // Or if the file doesn't exists, Print a sane message to
-                             "' not found or not a valid pdf file.");                           // the logWindow.
+            logWindow->print("'" + sourceFolderChoice + fileName +                              // Or if the file doesn't exist or is not a valid pdf, print
+                             "' not found or not a valid pdf file.");                           // a sane message to the logWindow.
         }
     }
 
@@ -120,13 +109,13 @@ bool Logic::getMimeIsOk(QString sourceFile) {                                   
     QMimeDatabase db;
     QMimeType mime = db.mimeTypeForFile(sourceFile);
 
-    if (mime.inherits("application/pdf")) {                                                     // Check mime type returns pdf and return true if so
-
+    if (mime.inherits("application/pdf")) {                                                     // Check mime type returns pdf and return true if so.
+                                                                                                // Written slightly verbosely for readability.
         return true;
-                                                                                                // Otherwise return false.
+
     } else {
 
-        return false;
+        return false;                                                                           // Otherwise return false.
     }
 }
 
@@ -137,7 +126,7 @@ bool Logic::getMimeIsOk(QString sourceFile) {                                   
 QSize Logic::getDocSize(QString fileName) {                                                     // Called second by handleSortFilesBtn() after getFileList().
 
     Poppler::Document *doc;                                                                     // Create a variable which holds a poppler document.
-    doc = Poppler::Document::load(sourceFolderChoice + "/" + fileName);                         // Load an actual pdf into that variable.
+    doc = Poppler::Document::load(sourceFolderChoice + fileName);                               // Load an actual pdf into that variable.
     Poppler::Page *page = doc->page(0);                                                         // Get the first page from the document.
 
     QSize pageSize = page->pageSize();                                                          // Get the size of the page.
@@ -188,18 +177,18 @@ QString Logic::copyFileToFolder(QString fileName, QString outputFolder) {       
 
     // --------------------------------------------
 
-    if (!QFile::exists(outputFolder + "/" + fileName)) {
+    if (!QFile::exists(outputFolder + fileName)) {
                                                                                                 // Check to see if the file already exists
-        QFile::copy(sourceFolderChoice + "/" + fileName, outputFolder + "/" + fileName);        // If it doesn't already exist copy it.
+        QFile::copy(sourceFolderChoice + fileName, outputFolder + fileName);                    // If it doesn't already exist copy it.
 
     } else {
 
-        return "Source file '" + fileName + "' already exists in '" + outputFolder + "'";       // If it already exists return a message that reflects this.
+        return "A file named '" + fileName + "' already exists in '" + outputFolder + "'";      // If it already exists return a message that reflects this.
     }
 
     // --------------------------------------------
 
-    if (QFile::exists(outputFolder + "/" + fileName)) {
+    if (QFile::exists(outputFolder + fileName)) {
                                                                                                 // Again check to see if the file exists
         return "Successfully copied '" + fileName + "' to '" + outputFolder + "'";              // If it does add a success message to the log window.
 
@@ -222,24 +211,24 @@ bool Logic::getIsInRange(int val, int lwrA, int uprA, int lwrB, int uprB) {     
 // -------------------------------------------------------------------------
 
 
-void Logic::handleSourceFolderBtn() {                                                           // Called when user presses the source folder button
+void Logic::setSourceFolderChoice(QString sourceFolderChoice) {                                 // Called when user presses the source folder button
 
-    QFileDialog srcDialog;                                                                      // Create new dialog template which only allows the user to select
-    srcDialog.setFileMode(QFileDialog::Directory);                                              // folders and whose default folder is the user's home directory.
-    srcDialog.setDirectory(QStandardPaths::standardLocations(QStandardPaths::HomeLocation).last());
+    this->sourceFolderChoice = sourceFolderChoice;                                              // Set local (convenience) sourceFolderChoice variable.
+    sourceFolder->setSourceFolderText(sourceFolderChoice);                                      // Then set the QLineEdit source folder text accordingly.
 
-    if (srcDialog.exec()) {                                                                     // If user clicked ok to confirm their choice
+    // --------------------------------------------
 
-        sourceFolderChoice = srcDialog.selectedFiles()[0];                                      // Get their first clicked folder as the location for output
-        sourceFolder->setSourceFolderText(sourceFolderChoice);                                  // Set the cosmetic text line in the source widget
+    for (PaperSize *paperSize : paperSizes) {                                                   // Then for each paperSize
 
-        for (PaperSize *paperSize : paperSizes) {                                               // Then for each paperSize
+        if (!paperSize->getHasChosenBespokeFolder()) {                                          // If a bespoke output folder hasn't been chosen for that size.
 
-            if (!paperSize->getHasChosenBespokeFolder()) {                                      // If a bespoke output folder hasn't been chosen for that size.
+            paperSize->setOutputFolder(sourceFolderChoice);                                     // Send the new source folder so the sizes can update their
+        }                                                                                       // respective output folders
+    }
 
-                paperSize->setOutputFolder(sourceFolderChoice);                                 // Send the new source folder so the sizes can update their
-            }                                                                                   // respective output folders
-        }
+    if (!otherPaperSize->getHasChosenBespokeFolder()) {                                         // If the "Other" paper size doesn't have a bespoke output
+                                                                                                // choice, send the new source folder so it can update its
+        otherPaperSize->setOutputFolder(sourceFolderChoice);                                    // output folder.
     }
 }
 
@@ -265,18 +254,18 @@ QWidget* Logic::getPaperSize(int arrayElementLocation) {                        
 // -------------------------------------------------------------------------
 
 
-QPlainTextEdit* Logic::getLogWindow() {                                                         // Allows mainMindow to get new logWindow object
+QWidget* Logic::getOtherPaperSize() {                                                           // Allows mainWindow to get new paperSize object
 
-    return logWindow;
+    return otherPaperSize;
 }
 
 
 // -------------------------------------------------------------------------
 
 
-QDialogButtonBox* Logic::getActionBtns() {                                                      // Allows mainMindow to get new actionBtns object
+QPlainTextEdit* Logic::getLogWindow() {                                                         // Allows mainMindow to get new logWindow object
 
-    return actionBtns;
+    return logWindow;
 }
 
 

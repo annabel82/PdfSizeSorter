@@ -14,9 +14,8 @@ public:
     QPushButton        *sourceFolderBtn;
 
 private:
-    QLineEdit          *sourceFolderLine;
+    QLineEdit          *sourceFolderText;
     QString             homeFolder;
-    QString             sourceFolder;
 };
 
 #endif // SOURCEFOLDER_H
