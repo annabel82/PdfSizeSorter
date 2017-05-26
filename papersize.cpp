@@ -49,7 +49,7 @@ PaperSize::PaperSize(QString name, int width, int height, QString homeFolder, bo
 
     QLabel *outputFolderLabel = new QLabel(tr("Output Folder"));
     outputFolderText = new QLineEdit(homeFolder + name + "/");
-    outputFolderText->setStatusTip("Location " + name + " sized files will be copied to (read only)");
+    outputFolderText->setStatusTip("Location " + name + " sized files will be copied to");
     QPushButton *outputFolderBtn = new QPushButton(tr("Choose location"), this);
     outputFolderBtn->setStatusTip("Choose the location " + name + " sized files will be copied to");
 

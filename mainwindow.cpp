@@ -2,7 +2,7 @@
 
 MainWindow::MainWindow()
 {                                                                                               // Instantiate Logic class which in turn instantiates source,
-    logic = new Logic;                                                                   // pageSize and logWindow.
+    logic = new Logic;                                                                          // pageSize and logWindow.
     QWidget *window = new QWidget;                                                              // Create widget we intend to be used as primary widget (frame).
     QGridLayout *grid = new QGridLayout;
 
@@ -33,7 +33,7 @@ MainWindow::MainWindow()
 
     grid->addWidget(logic->getSourceFolder(), 0, 0);                                            // Add source folder
     grid->addWidget(tabWidget, 1, 0);
-    grid->addWidget(actionBtns, 2, 0);                                                        // Add close / run buttons
+    grid->addWidget(actionBtns, 2, 0);                                                          // Add close / run buttons
     grid->addWidget(logic->getLogWindow(), 3, 0);                                               // Add logWindow
 
     // -------------------------------------
