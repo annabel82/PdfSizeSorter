@@ -79,8 +79,8 @@ void MainWindow::handleSourceFolderBtn() {
         // Get first clicked folder as "choice" value.
         QString choice = srcDialog.selectedFiles()[0];
 
-        // Test to see if the OS appends or location choice results
-        // in a trailing forward slash.
+        // Test to see if the OS appends our location choice results
+        // with a trailing forward slash.
         if (!choice.endsWith("/"))
         {
             // If it doesn't have a trailing forward slash add one.

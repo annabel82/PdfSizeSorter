@@ -129,7 +129,7 @@ void PaperSize::handleFolderBtn()
         QString choice = dialog.selectedFiles()[0];
 
         // Test to see if the OS appends our location choice results
-        // in a trailing forward slash.
+        // with a trailing forward slash.
         if (!choice.endsWith("/"))
         {
             // If it doesn't have a trailing forward slash, add one and
@@ -150,7 +150,7 @@ void PaperSize::handleFolderBtn()
 /*! ------------------------------------------------------------------------
   Called from Logic if hasChosenBespokeFolder returns false
   This updates the output folder of this paper size such
-  that it's a subfolder of the source folder the just chose.
+  that it's a subfolder of the source folder the user chose.
   \param    sourceFolder     The chosen source folder
 */
 void PaperSize::setOutputFolder(QString sourceFolder)

@@ -38,8 +38,7 @@ SourceFolder::SourceFolder(bool readOnly, QString homeFolder)
 
 
 /*! ------------------------------------------------------------------------
-  Allows logic to update the source line edit, the
-  value of which is read when
+  Allows logic to update the source line edit box
   \param    sourceFolderText    The text with which to update
 */
 void SourceFolder::setSourceFolderText(QString sourceFolderText)

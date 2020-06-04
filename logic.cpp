@@ -1,7 +1,7 @@
 #include <logic.h>
 
 /*! ------------------------------------------------------------------------
-  Called by mainwidnow to handle the logic of the application. This then
+  Called by mainwindows to handle the logic of the application. This then
   calls source folder, papersize and log window
 */
 Logic::Logic()
@@ -37,9 +37,9 @@ Logic::Logic()
 
 
 /*! ------------------------------------------------------------------------
-  Called when the user clicks the "Sort Files" button and does the requests
-  a list of all pdfs in the source folder and sorts them (after some basic
-  checks are passed). Also responsible for outputting to the log window
+  Called when the user clicks the "Sort Files" button and requests a list of
+  all pdfs in the source folder and sorts them (after some basic checks are
+  passed). Also responsible for outputting to the log window upon failure
 */
 void Logic::handleSortFilesBtn() {
 
@@ -56,7 +56,7 @@ void Logic::handleSortFilesBtn() {
         if (proceed && QFile::exists(sourceFile) && getMimeIsOk(sourceFile)) {
 
             // Get the size of the doc, the getDocSize function
-            // returns 0 for both height and width of the pdf
+            // returns 0 for both height and width if the pdf
             // was unreadable
             QSize pageSize = getDocSize(fileName);
 
@@ -81,8 +81,6 @@ void Logic::handleSortFilesBtn() {
                     // output folder.
                     outputFolder = paperSizes[elementLocation]->getOutputFolder();
                 }
-
-                // --------------------------------------------
 
                 // Attempt our copy and return a QString detailing outcome.
                 QString copyAttemptOutcome = copyFileToFolder(fileName, outputFolder);
@@ -124,8 +122,9 @@ QStringList Logic::getFileList() {
     {
         // If source folder doesn't exist set our continue flag to
         // false, print a message to the log window  and return NULL.
-        proceed = false;
         logWindow->print("Source folder '" + sourceFolderChoice + "' not found or not readable.");
+
+        proceed = false;        
         QStringList empty;
         return empty;
     }
@@ -155,8 +154,8 @@ bool Logic::getMimeIsOk(QString fileName)
 
 
 /*! ------------------------------------------------------------------------
-  Called second by handleSortFilesBtn after getFileList and GetMimeIsOk in
-  order to get the size of the first page of the .pdf file.
+  Called by handleSortFilesBtn after getFileList and GetMimeIsOk in order
+  to get the size of the first page of the .pdf file.
   \param    fileName    The name of the file
   \returns              The size of the first part of the .pdf file,
                         will return 0, 0 if unable to calculate it
@@ -195,9 +194,13 @@ QSize Logic::getDocSize(QString fileName)
 */
 int Logic::getDocsPaperSizeArrayLocation(QSize pageSize)
 {
-    int width  = pageSize.width()  * 0.3528;// Calculate width and height in millimeteres from the amount
-    int height = pageSize.height() * 0.3528;// of points (kind of like dots) the page contains.
-    int elementLocation = 0;// This serves as a counter so we can return element location.
+    // Calculate width and height in millimeteres from the amount
+    // of points (kind of like dots) the page contains.
+    int width  = pageSize.width()  * 0.3528;
+    int height = pageSize.height() * 0.3528;
+
+    // This serves as a counter so we can return element location.
+    int elementLocation = 0;
 
     for (PaperSize *paperSize : paperSizes)
     {
@@ -216,12 +219,13 @@ int Logic::getDocsPaperSizeArrayLocation(QSize pageSize)
 
             return elementLocation;
         }
+
         // Increment our counter which serves to describe the location
         // of the paper size's location in the paper size array.
         elementLocation++;
     }
 
-    // Returns 404 if size isn't within range of a known paperSize.
+    // If size isn't within range of a known paperSize.
     return 404;
 }
 
@@ -230,7 +234,7 @@ int Logic::getDocsPaperSizeArrayLocation(QSize pageSize)
 /*! ------------------------------------------------------------------------
   Called for each document returned by the getFileList that also passes mine
   type validity check etc. Does the actual copying of the .pdf to the
-  correct folder
+  correct folder.
   \param    fileName        The name of the .pdf file to copy
   \param    outputFolder    The name of the folder to copy the .pdf
   \returns                  A string stating the event which occured when
@@ -242,7 +246,7 @@ QString Logic::copyFileToFolder(QString fileName, QString outputFolder)
 
     if (!qOutputFolder.exists())
     {
-        // If it doesn't exist create it.
+        // If the output folder doesn't exist create it.
         qOutputFolder.mkpath(outputFolder);
     }
 
@@ -254,6 +258,7 @@ QString Logic::copyFileToFolder(QString fileName, QString outputFolder)
     }
     else
     {
+        // If the file already exists, add a message to log window.
         return "A file named '" + fileName + "' already exists in '" + outputFolder + "'";
     }
 
@@ -311,7 +316,6 @@ void Logic::setSourceFolderChoice(QString sourceFolderChoice)
         // If a bespoke output folder hasn't been chosen for that size.
         if (!paperSize->getHasChosenBespokeFolder())
         {
-
             // Send the new source folder so the sizes can update their
             // respective output folders
             paperSize->setOutputFolder(sourceFolderChoice);
