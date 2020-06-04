@@ -59,7 +59,7 @@ PaperSize::PaperSize(QString name, int width, int height, QString homeFolder, bo
     outputFolderText = new QLineEdit(homeFolder + name + "/");
     outputFolderText->setStatusTip("Currently selected location that " + name + " sized pdf files will be copied in to");
 
-    QPushButton *outputFolderBtn = new QPushButton(tr("Choose location ..."), this);
+    QPushButton *outputFolderBtn = new QPushButton(tr("  Choose location ...  "), this);
     outputFolderBtn->setStatusTip("Choose the location " + name + " sized pdf files will be copied in to");
 
     connect(outputFolderBtn, &QPushButton::clicked, this, [this]{ handleFolderBtn(); });

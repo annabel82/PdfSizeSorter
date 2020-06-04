@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.12.1, 2020-06-03T19:00:37. -->
+<!-- Written by QtCreator 4.12.1, 2020-06-04T16:01:53. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -306,8 +306,8 @@
     </valuelist>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes">
-     <value type="QString">DYLD_LIBRARY_PATH=/System/Library/Frameworks/ImageIO.framework/Resources:/usr/local/lib/:/Users/anna/Qt/5.15.0/clang_64/lib</value>
-     <value type="QString">DYLD_FRAMEWORK_PATH=/System/Library/Frameworks/ImageIO.framework/Resources:/usr/local/lib/:/Users/anna/Qt/5.15.0/clang_64/lib</value>
+     <value type="QString">DYLD_FRAMEWORK_PATH</value>
+     <value type="QString">DYLD_LIBRARY_PATH</value>
     </valuelist>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/Users/anna/src/PdfSizeSorter/PdfSizeSorter.pro</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/Users/anna/src/PdfSizeSorter/PdfSizeSorter.pro</value>

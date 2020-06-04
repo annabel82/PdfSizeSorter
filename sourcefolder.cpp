@@ -14,7 +14,7 @@ SourceFolder::SourceFolder(bool readOnly, QString homeFolder)
     sourceFolderText->setStatusTip("Currently selected source pdf files location");
     sourceFolderText->setReadOnly(readOnly);
 
-    sourceFolderBtn = new QPushButton(tr("Choose location ..."), this);
+    sourceFolderBtn = new QPushButton(tr("  Choose location ...  "), this);
     sourceFolderBtn->setStatusTip("Choose the location of source pdf files");
 
     QGridLayout *sourceContainer = new QGridLayout;

@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = untitled1
+TARGET = PdfSizeSorter
 TEMPLATE = app
 
 RC_ICONS = PdfSizeSorter.ico
@@ -40,6 +40,6 @@ HEADERS += \
     sourcefolder.h \
     logic.h
 
-INCLUDEPATH += C:\Qt\Tools\mingw530_32\include\poppler\qt5
-LIBS += c:\poppler\libpoppler-qt5.dll
+INCLUDEPATH += $$PWD\poppler_for_win\src
+LIBS += $$PWD\poppler_for_win\bin\libpoppler-qt5.dll
 
