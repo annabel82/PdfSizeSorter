@@ -6,8 +6,9 @@
 #include <papersize.h>
 #include <logwindow.h>
 
-class Logic : public QObject {
 
+class Logic : public QObject
+{
     Q_OBJECT
 
 public:
@@ -23,7 +24,7 @@ public:
 private:
     QStringList         getFileList();
     bool                getMimeIsOk(QString);
-    QSize               getDocSize(QString fileName);    
+    QSize               getDocSize(QString fileName);
     int                 getDocsPaperSizeArrayLocation(QSize pageSize);
     QString             copyFileToFolder(QString fileName, QString outputFolder);
     bool                getIsInRange(int val, int lwrA, int uprA, int lwrB, int uprB);
@@ -36,5 +37,3 @@ private:
 };
 
 #endif // LOGIC_H
-
-

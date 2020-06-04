@@ -3,15 +3,16 @@
 
 #include <logic.h>
 
-class MainWindow : public QMainWindow {
 
+class MainWindow : public QMainWindow
+{
     Q_OBJECT
 
 public:
     MainWindow();
 
 private:
-    QDialogButtonBox   *actionBtns;
+    QDialogButtonBox   *closeRunButtons;
     void                handleSourceFolderBtn();
     Logic              *logic;
 };

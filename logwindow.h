@@ -3,6 +3,7 @@
 
 #include <QPlainTextEdit>
 
+
 class LogWindow : public QPlainTextEdit
 {
     Q_OBJECT
@@ -12,9 +13,6 @@ public:
     void        print(const QString& text);
     void        print(const int);
     void        n();
-
-private:
-    //QFile m_logFile;
 };
 
 #endif // LOGWINDOW_H
