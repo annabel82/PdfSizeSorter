@@ -4,6 +4,6 @@ This program was requested by a friend and implemented chiefly as a learning exe
 
 Utilises Qt and poppler libs for UI and reading pdf files; you must install the poppler libs before compiling.
 
-![MainUI](https://github.com/annabel82/PdfSizeSorter/images/PdfSizeSorter_win.png)
+![MainUI](https://github.com/annabel82/PdfSizeSorter/blob/master/images/PdfSizeSorter_win.png)
 
-![MainUI](https://github.com/annabel82/PdfSizeSorter/images/PdfSizeSorter.png)
+![MainUI](https://github.com/annabel82/PdfSizeSorter/blob/master/images/PdfSizeSorter.png)
