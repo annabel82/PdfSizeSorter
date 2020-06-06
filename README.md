@@ -23,7 +23,7 @@ This program was requested by a friend and implemented chiefly as a learning exe
 
 ## Screenshots
 
-![MainUI](https://github.com/annabel82/PdfSizeSorter/blob/master/images/PdfSizeSorter.png)
+![MainUI](https://github.com/annahowell/PdfSizeSorter/blob/master/images/PdfSizeSorter.png)
 
-![MainUI](https://github.com/annabel82/PdfSizeSorter/blob/master/images/PdfSizeSorter_win.png)
+![MainUI](https://github.com/annahowell/PdfSizeSorter/blob/master/images/PdfSizeSorter_win.png)
 
