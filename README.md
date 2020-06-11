@@ -15,9 +15,9 @@ This program was requested by a friend and implemented chiefly as a learning exe
 
 ### Windows
 
-* All Poppler libs for compiling are contained in the poppler\_for\_win folder and are linked to from the included .pro file below.
+* Against best practice I have included all dependencies for Windows because they can be rather hard to find, especially the bins. They're contained in the poppler\_for\_win folder and are linked to from the included .pro file below.
 
-* Use the included PdfSizeSorter_windows.pro file for Qt Creator.
+* Use PdfSizeSorter_windows.pro file for Qt Creator.
 
 
 
