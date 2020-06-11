@@ -25,5 +25,5 @@ This program was requested by a friend and implemented chiefly as a learning exe
 
 ![MainUI](screenshots/PdfSizeSorter.png)
 
-![MainUI](screeshots/PdfSizeSorter_win.png)
+![MainUI](screenshots/PdfSizeSorter_win.png)
 
