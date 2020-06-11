@@ -23,7 +23,7 @@ This program was requested by a friend and implemented chiefly as a learning exe
 
 ## Screenshots
 
-![MainUI](blob/master/images/PdfSizeSorter.png)
+![MainUI](screenshots/PdfSizeSorter.png)
 
-![MainUI](blob/master/images/PdfSizeSorter_win.png)
+![MainUI](screeshots/PdfSizeSorter_win.png)
 
